@@ -1,0 +1,11 @@
+framework module tencent_chat_push_for_china {
+  umbrella header "tencent_chat_push_for_china-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module tencent_chat_push_for_china.Swift {
+  header "tencent_chat_push_for_china-Swift.h"
+  requires objc
+}

@@ -1,0 +1,11 @@
+framework module tencent_cloud_chat_sdk {
+  umbrella header "tencent_cloud_chat_sdk-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module tencent_cloud_chat_sdk.Swift {
+  header "tencent_cloud_chat_sdk-Swift.h"
+  requires objc
+}

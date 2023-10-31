@@ -1,0 +1,6 @@
+framework module plain_notification_token_for_us {
+  umbrella header "plain_notification_token_for_us-umbrella.h"
+
+  export *
+  module * { export * }
+}

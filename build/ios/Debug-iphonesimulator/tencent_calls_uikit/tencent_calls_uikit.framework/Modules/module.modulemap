@@ -1,0 +1,11 @@
+framework module tencent_calls_uikit {
+  umbrella header "tencent_calls_uikit-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module tencent_calls_uikit.Swift {
+  header "tencent_calls_uikit-Swift.h"
+  requires objc
+}

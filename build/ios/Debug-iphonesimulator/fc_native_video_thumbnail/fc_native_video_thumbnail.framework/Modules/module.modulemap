@@ -1,0 +1,11 @@
+framework module fc_native_video_thumbnail {
+  umbrella header "fc_native_video_thumbnail-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module fc_native_video_thumbnail.Swift {
+  header "fc_native_video_thumbnail-Swift.h"
+  requires objc
+}

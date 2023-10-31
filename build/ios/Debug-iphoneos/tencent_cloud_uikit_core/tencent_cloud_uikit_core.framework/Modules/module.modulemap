@@ -1,0 +1,11 @@
+framework module tencent_cloud_uikit_core {
+  umbrella header "tencent_cloud_uikit_core-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module tencent_cloud_uikit_core.Swift {
+  header "tencent_cloud_uikit_core-Swift.h"
+  requires objc
+}

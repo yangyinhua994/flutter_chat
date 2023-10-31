@@ -1,0 +1,11 @@
+framework module tencent_calls_engine {
+  umbrella header "tencent_calls_engine-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module tencent_calls_engine.Swift {
+  header "tencent_calls_engine-Swift.h"
+  requires objc
+}

@@ -1,0 +1,11 @@
+framework module Hydra {
+  umbrella header "HydraAsync-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module Hydra.Swift {
+  header "Hydra-Swift.h"
+  requires objc
+}

@@ -1,0 +1,11 @@
+framework module image_clipboard {
+  umbrella header "image_clipboard-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module image_clipboard.Swift {
+  header "image_clipboard-Swift.h"
+  requires objc
+}
