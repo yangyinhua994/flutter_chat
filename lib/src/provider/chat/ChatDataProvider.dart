@@ -5,13 +5,10 @@ import '../../model/message.dart';
 class ChatDataProvider extends ChangeNotifier {
   final List<Message> _messages = [];
 
-  Set<Message> uniqueMessages = Set<Message>();
 
-  late final List<BigInt> _selectedMessageIds = [];
+  late final List<String> _selectedMessageIds = [];
 
   List<Message> get messages => _messages;
-
-  List<BigInt> get selectedMessageIds => _selectedMessageIds;
 
   int _selectedNum = 0;
 
@@ -24,11 +21,21 @@ class ChatDataProvider extends ChangeNotifier {
   //index 0好友 1群聊
   List delStyleNum = [0, 0];
 
+  void addSelectedMessageIds(String id){
+    _selectedMessageIds.add(id);
+    notifyListeners();
+  }
+
+  void removeSelectedMessageIds(String id){
+    _selectedMessageIds.remove(id);
+    notifyListeners();
+  }
+
   //更新存档，自动判断选择的列表并存档
   void updateArchive() {
     for (var i = 0; i < _messages.length; i++) {
       Message newMessage = _messages[i];
-      for (var selectedMessageId in selectedMessageIds) {
+      for (var selectedMessageId in _selectedMessageIds) {
         if (newMessage.id == selectedMessageId) {
           newMessage.isArchive = true;
           _messages[i] = newMessage;
@@ -122,7 +129,7 @@ class ChatDataProvider extends ChangeNotifier {
     delStyleNum[0] = singlePerson;
     delStyleNum[1] = groupChat;
     _selectedNum = 0;
-    selectedMessageIds.clear();
+    _selectedMessageIds.clear();
     notifyListeners();
   }
 
@@ -135,12 +142,12 @@ class ChatDataProvider extends ChangeNotifier {
     return _messages;
   }
 
-  void addSelectedMessageId(BigInt id) {
+  void addSelectedMessageId(String id) {
     _selectedMessageIds.add(id);
     notifyListeners();
   }
 
-  List<BigInt> getSelectedMessageIds() {
+  List<String> getSelectedMessageIds() {
     return _selectedMessageIds;
   }
 

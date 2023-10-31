@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tencent_cloud_chat_demo/src/chat.dart';
+import 'package:tencent_cloud_chat_demo/src/chat_my.dart';
 import 'package:tencent_cloud_chat_demo/src/provider/chat/ChatDataProvider.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -212,7 +213,7 @@ class _ChatItemState extends State<ChatItem> {
     chatDataProvider.addListener(() {
       setState(() {});
     });
-
+    bool goMyChat = true;
     return Container(
       child: Column(
         children: [
@@ -221,9 +222,11 @@ class _ChatItemState extends State<ChatItem> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Chat(
-                            selectedConversation: widget.selectedConversation,
-                          )));
+                      builder: (context) => goMyChat
+                          ? ChatMy(message: widget.message)
+                          : Chat(
+                              selectedConversation: widget.selectedConversation,
+                            )));
             },
             title: Column(
               children: [
@@ -234,11 +237,11 @@ class _ChatItemState extends State<ChatItem> {
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            // widget.message.isSelected
-                            //     ? chatDataProvider.selectedMessageIds
-                            //         .remove(widget.message.id)
-                            //     : chatDataProvider.selectedMessageIds
-                            //         .add(widget.message.id);
+                            widget.message.isSelected
+                                ? chatDataProvider
+                                    .removeSelectedMessageIds(widget.message.id)
+                                : chatDataProvider
+                                    .addSelectedMessageIds(widget.message.id);
                             widget.message.isSelected =
                                 !widget.message.isSelected;
                           });

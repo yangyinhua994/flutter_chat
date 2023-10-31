@@ -10,6 +10,11 @@ class Message implements Comparable<Message> {
 
   int unreadMessages;
 
+  //是否为好友
+  bool friend;
+  //置顶消息
+  String topMsg;
+
   //类型， 1单人 2群聊
   int style;
 
@@ -60,6 +65,8 @@ class Message implements Comparable<Message> {
     this.v2timConversation,
     this.lastMessage,
     this.showSelectIcon = false,
+    this.friend = true,
+    this.topMsg = '',
   });
 
   void setToppingTimeNow() {

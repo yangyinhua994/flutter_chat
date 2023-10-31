@@ -96,51 +96,7 @@ class HomePageState extends State<HomePage> {
     final theme = Provider.of<DefaultThemeData>(context).theme;
     return TencentPage(
         child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              iconTheme: const IconThemeData(
-                color: Colors.white,
-              ),
-              shadowColor: theme.weakDividerColor,
-              elevation: currentIndex == 0 ? 0 : 1,
-              automaticallyImplyLeading: false,
-              leading: TextButton(
-                  onPressed: () {
-                    chatDataProvider.setShowSelectIcon(true);
-                  },
-                  child: const Text('编辑')),
-              title: getTitle(localSetting),
-              centerTitle: true,
-              actions: [
-                if (chatDataProvider.isShowSelectIcon())
-                  TextButton(
-                    child: const Text("完成"),
-                    onPressed: () {
-                      chatDataProvider.setShowSelectIcon(false);
-                    },
-                  ),
-                if (!chatDataProvider.isShowSelectIcon())
-                  IconButton(
-                    onPressed: () {
-                      // 添加另一个图标的点击操作
-                    },
-                    icon: Image.asset('assets/chat/奖杯.png'),
-                  ),
-                if (!chatDataProvider.isShowSelectIcon() &&
-                    [0, 1].contains(currentIndex))
-                  Builder(builder: (BuildContext c) {
-                    return IconButton(
-                      onPressed: () {
-                        _showTooltip(c);
-                      },
-                      icon: const Icon(
-                        Icons.add_circle_outline,
-                        color: Colors.blue,
-                      ),
-                    );
-                  }),
-              ],
-            ),
+            appBar: getMessageAppBar(theme, currentIndex, chatDataProvider),
             body: IndexedStack(
               index: currentIndex,
               children:
@@ -185,33 +141,51 @@ class HomePageState extends State<HomePage> {
                           onPressed: () {
                             // 处理 "全部设为已读" 操作
                           },
-                          child: getChatDataProvider(context).selectedMessageIds.isEmpty
+                          child: chatDataProvider
+                                  .getSelectedMessageIds()
+                                  .isEmpty
                               ? TextButton(
                                   onPressed: () {},
-                                  child: Text(
+                                  child: const Text(
                                     "全部设为已读",
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 )
                               : TextButton(
                                   onPressed: () {
-                                    // 处理 "全部设为已读" 操作
+                                    chatDataProvider.setShowSelectIcon(false);
                                   },
-                                  child: Text("全部设为已读"),
+                                  child: const Text("全部设为已读"),
                                 ),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            // 处理 "归档" 操作
-                          },
-                          child: Text("归档"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            // 处理 "删除" 操作
-                          },
-                          child: Text("删除"),
-                        ),
+                        chatDataProvider.getSelectedMessageIds().isEmpty
+                            ? TextButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  "归档",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              )
+                            : TextButton(
+                                onPressed: () {
+                                  chatDataProvider.setShowSelectIcon(false);
+                                },
+                                child: const Text("归档"),
+                              ),
+                        chatDataProvider.getSelectedMessageIds().isEmpty
+                            ? TextButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  "删除",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              )
+                            : TextButton(
+                                onPressed: () {
+                                  chatDataProvider.setShowSelectIcon(false);
+                                },
+                                child: const Text("删除"),
+                              ),
                       ],
                     ),
                   )),
@@ -614,4 +588,81 @@ class NavigationBarData {
       this.widget,
       this.onTap,
       this.index});
+}
+
+AppBar getMessageAppBar(
+    TUITheme theme, int currentIndex, ChatDataProvider chatDataProvider) {
+  // 聊天界面appbar
+  return AppBar(
+    backgroundColor: Colors.transparent,
+    iconTheme: const IconThemeData(
+      color: Colors.white,
+    ),
+    shadowColor: theme.weakDividerColor,
+    elevation: currentIndex == 0 ? 0 : 1,
+    automaticallyImplyLeading: false,
+    title: Row(
+      children: [
+        Expanded(
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            chatDataProvider.isShowSelectIcon()
+                ? TextButton(
+                    onPressed: () {},
+                    child: chatDataProvider.getSelectedMessageIds().isEmpty
+                        ? Text(
+                            '全选(${chatDataProvider.getSelectedMessageIds().length})')
+                        : const Text('全选()'))
+                : TextButton(
+                    onPressed: () {
+                      if (!chatDataProvider.isShowSelectIcon()) {
+                        chatDataProvider.setShowSelectIcon(true);
+                      }
+                    },
+                    child: const Text('编辑')),
+            chatDataProvider.isShowSelectIcon()
+                ? const Text(
+                    '编辑',
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  )
+                : const Text(
+                    '消息',
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  ),
+            Row(
+              children: [
+                if (chatDataProvider.isShowSelectIcon())
+                  TextButton(
+                    child: const Text("完成"),
+                    onPressed: () {
+                      chatDataProvider.setShowSelectIcon(false);
+                    },
+                  ),
+                if (!chatDataProvider.isShowSelectIcon())
+                  IconButton(
+                    onPressed: () {
+                      // 添加另一个图标的点击操作
+                    },
+                    icon: Image.asset('assets/chat/奖杯.png'),
+                  ),
+                if (!chatDataProvider.isShowSelectIcon() &&
+                    [0, 1].contains(currentIndex))
+                  Builder(builder: (BuildContext c) {
+                    return IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.add_circle_outline,
+                        color: Colors.blue,
+                      ),
+                    );
+                  }),
+              ],
+            )
+          ],
+        ))
+      ],
+    ),
+    centerTitle: true,
+  );
 }
